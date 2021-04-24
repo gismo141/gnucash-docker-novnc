@@ -5,6 +5,10 @@ MAINTAINER squisher23 <squisher23@withoutmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
 
+ADD startup.sh /startup.sh
+RUN chmod 0755 /startup.sh && \
+	mkdir /var/gnucash
+
 #Install packages
 WORKDIR /opt
 RUN apt-get update -y && \
@@ -59,3 +63,12 @@ RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.l
 	&& rm -r /tmp/gnucash.git
 
 CMD [ "/gnucash/bin/gnucash", "--logto", "stderr" ]
+
+#Setup Volumes
+VOLUME /var/gnucash
+
+#Finalize
+WORKDIR /var/gnucash
+CMD /startup.sh
+EXPOSE 6080
+
