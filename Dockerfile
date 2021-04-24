@@ -5,6 +5,7 @@ MAINTAINER aitor3ml <aitor3ml@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
 
+#Install packages
 WORKDIR /opt
 RUN apt-get update -y && \
 	apt-get install -y git x11vnc xvfb openbox net-tools python-numpy menu &&  \
