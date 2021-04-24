@@ -5,9 +5,9 @@ MAINTAINER aitor3ml <aitor3ml@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
 
-ENV LANG es_ES.UTF-8
-ENV LANGUAGE es_ES:es
-ENV LC_ALL es_ES.UTF-8
+ENV LANG de_DE.UTF-8
+ENV LANGUAGE de_DE:es
+ENV LC_ALL de_DE.UTF-8
 
 ENV GNUCASH_VERSION 4.5
 
@@ -15,9 +15,9 @@ RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.l
 	printf "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list.d/backports.list \
 	printf "deb http://deb.debian.org/debian stretch-updates main" >> /etc/apt/sources.list.d/backports.list \
 	&& apt-get update && apt-get install -y locales \
-	&& sed -i -e 's/# es_ES.UTF-8 UTF-8/es_ES.UTF-8 UTF-8/' /etc/locale.gen && locale-gen && \
+	&& sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && locale-gen && \
 	dpkg-reconfigure --frontend=noninteractive locales && \
-	update-locale LANG=es_ES.UTF-8 \
+	update-locale LANG=de_DE.UTF-8 \
 	&& apt-get -y install git \
 	&& git clone --single-branch -b $GNUCASH_VERSION https://github.com/GnuCash/gnucash /tmp/gnucash.git \
 	&& cd /tmp/gnucash.git \
