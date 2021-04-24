@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 
-MAINTAINER aitor3ml <aitor3ml@gmail.com>
+MAINTAINER squisher23 <squisher23@withoutmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
