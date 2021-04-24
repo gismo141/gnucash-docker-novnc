@@ -1,4 +1,3 @@
 # build
-docker build -t aitor3ml/gnucash-docker .
-# run
-docker run -v /tmp/.X11-unix:/tmp/.X11-unix aitor3ml/gnucash-docker
+docker build -t Squisher23/gnucash-docker-novnc .
+
