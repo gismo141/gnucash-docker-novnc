@@ -5,6 +5,16 @@ MAINTAINER aitor3ml <aitor3ml@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
 
+WORKDIR /opt
+RUN apt-get update -y && \
+	apt-get install -y git x11vnc xvfb openbox net-tools python-numpy menu &&  \
+	git clone https://github.com/kanaka/noVNC.git noVNC && \
+	git clone https://github.com/kanaka/websockify noVNC/utils/websockify && \
+	apt-get remove -y git && \
+	apt-get autoremove -y && \
+	apt-get autoclean -y && \
+	rm -rf /var/lib/apt/lists/*
+
 ENV LANG de_DE.UTF-8
 ENV LANGUAGE de_DE:es
 ENV LC_ALL de_DE.UTF-8
