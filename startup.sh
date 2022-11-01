@@ -3,7 +3,7 @@
 #Define locale
 if [[ ! -z  $LOCALE ]]
 then
-	if [ "$LOCALE" != "de_DE" ] && [ "$LOCALE" != "en_US" ] && [ "$LOCALE" != "en_GB" ] 
+	if [ "$LOCALE" != "de_DE" ] 
 	then
 		locale-gen $LOCALE
 	fi
