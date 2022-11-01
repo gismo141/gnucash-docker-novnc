@@ -1,8 +1,10 @@
-# build
+# How to
+## build
+```bash
 docker build -t gismo141/gnucash-docker-novnc .
+```
 
-## How to
-### Run
+## Run
 Start the container via
 ```bash
 docker run -td \
@@ -13,9 +15,9 @@ docker run -td \
 	-e VNC_PASS=<your_password> \
 	gismo141/gnucash-docker-novnc:<tag>
 ```
-Then access via http://localhost:6080.
-Default Password is gnucash
+Then access via [http://localhost:6080](http://localhost:6080).
+Default Password is `gnucash`
 
-### Locales
+## Locales
 The following locales are preinstalled
 * de_DE
