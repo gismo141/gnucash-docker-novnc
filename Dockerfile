@@ -4,10 +4,16 @@ MAINTAINER gismo141 <gismo141@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
+ENV VGNUCASH=4.12
+ENV RGNUCASH=4.12
 
 ADD startup.sh /startup.sh
 RUN chmod 0755 /startup.sh && \
 	mkdir /var/gnucash
+
+#Setup Language
+RUN apt-get update && apt-get install -y locales && \
+	locale-gen de_DE en_US en_GB 
 
 #Install packages
 WORKDIR /opt
@@ -20,45 +26,26 @@ RUN apt-get update -y && \
 	apt-get autoclean -y && \
 	rm -rf /var/lib/apt/lists/*
 
-ENV LANG de_DE.UTF-8
-ENV LANGUAGE de_DE:es
-ENV LC_ALL de_DE.UTF-8
-
-RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.list.d/backports.list \
-	printf "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list.d/backports.list \
-	printf "deb http://deb.debian.org/debian stretch-updates main" >> /etc/apt/sources.list.d/backports.list \
-	&& apt-get update && apt-get install -y locales \
-	&& sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && locale-gen && \
-	dpkg-reconfigure --frontend=noninteractive locales && \
-	update-locale LANG=de_DE.UTF-8 \
-	&& apt-get -y install git \
-	&& git clone --single-branch https://github.com/GnuCash/gnucash /tmp/gnucash.git \
-	&& cd /tmp/gnucash.git \
-	&& apt-get -y install cmake build-essential \
-	&& apt-get -y install pkg-config libgtk2.0-dev libxslt1-dev libxml2-dev libwebkit2gtk-4.0-dev \
-		swig3.0 guile-2.2-dev libgwenhywfar-core-dev \
-		libaqbanking-dev libgwengui-gtk3-dev libofx-dev \
-		xsltproc libgmock-dev \
-		libdbi-dev libdbd-mysql libdbd-pgsql libdbd-sqlite libdbd-sqlite3 \
-		libboost-all-dev=1.62.0.1 \
-		libsecret-1-dev \
-	&& apt-get install -y libfinance-quote-perl libfinance-quotehist-perl \
-		ofx aqbanking-tools libboost-program-options1.67.0 \
-	&& cmake -D CMAKE_INSTALL_PREFIX=/gnucash /tmp/gnucash.git \
-	&& cd /tmp/gnucash.git && make && make install && cd / \
-	&& apt-get -y --purge remove git cmake build-essential \
-		pkg-config libgtk2.0-dev libxslt1-dev libxml2-dev libwebkit2gtk-4.0-dev \
-                swig3.0 guile-2.2-dev libgwenhywfar-core-dev \
-                libaqbanking-dev libgwengui-gtk3-dev libofx-dev \
-                xsltproc libgmock-dev \
-                libdbi-dev libdbd-mysql libdbd-pgsql libdbd-sqlite libdbd-sqlite3 \
-		libboost-all-dev=1.62.0.1 \
-                libsecret-1-dev \
-	&& apt-get -y install guile-2.2 libgtk-3-0 libwebkit2gtk-4.0-37 libboost-locale1.67.0 libboost-filesystem1.67.0 libboost-date-time1.67.0 libboost-regex1.67.0 \
-		libdbd-mysql libdbd-pgsql libdbd-sqlite libdbd-sqlite3 dbus-x11 \
-	&& apt-get -y install libcanberra-gtk-module libcanberra-gtk3-module \
-	&& apt-get -y autoremove && apt-get clean \
-	&& rm -r /tmp/gnucash.git
+#Install GnuCash from Source
+WORKDIR /tmp/build/gnucash
+RUN apt-get update -y && \
+	apt-get build-dep -y gnucash && \
+	apt-get purge -y guile-2.0 && \
+	apt-get install -y \
+		wget slib libgnomeui-common libgnomeui-dev guile-1.8 guile-1.8-dev checkinstall \
+		build-essential autoconf intltool libtool \
+		aqbanking-tools && \
+	wget "https://downloads.sourceforge.net/project/gnucash/gnucash (stable)/$VGNUCASH/gnucash-$RGNUCASH.tar.bz2" && \
+	tar xvjf gnucash-$RGNUCASH.tar.bz2 && rm gnucash-$RGNUCASH.tar.bz2 && mv gnucash-$VGNUCASH/* . && rmdir gnucash-$VGNUCASH && \
+	./configure --enable-compile-warnings --with-html-engine=webkit --enable-aqbanking && \
+	make && make install && checkinstall -y && ldconfig && \
+	rm -r /tmp/build && \
+	apt-get remove -y \
+		wget slib libgnomeui-common libgnomeui-dev guile-1.8-dev checkinstall \
+		build-essential autoconf intltool libtool && \
+	apt-get autoremove -y && \
+	apt-get autoclean -y && \
+	rm -rf /var/lib/apt/lists/*
 
 #Setup Volumes
 VOLUME /var/gnucash
