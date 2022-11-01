@@ -1,6 +1,6 @@
-FROM debian:buster-slim
+FROM debian:stable-slim
 
-MAINTAINER squisher23 <squisher23@withoutmail.com>
+MAINTAINER gismo141 <gismo141@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DISPLAY :0
@@ -24,8 +24,6 @@ ENV LANG de_DE.UTF-8
 ENV LANGUAGE de_DE:es
 ENV LC_ALL de_DE.UTF-8
 
-ENV GNUCASH_VERSION 4.5
-
 RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.list.d/backports.list \
 	printf "deb http://security.debian.org/debian-security stretch/updates main" >> /etc/apt/sources.list.d/backports.list \
 	printf "deb http://deb.debian.org/debian stretch-updates main" >> /etc/apt/sources.list.d/backports.list \
@@ -34,7 +32,7 @@ RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.l
 	dpkg-reconfigure --frontend=noninteractive locales && \
 	update-locale LANG=de_DE.UTF-8 \
 	&& apt-get -y install git \
-	&& git clone --single-branch -b $GNUCASH_VERSION https://github.com/GnuCash/gnucash /tmp/gnucash.git \
+	&& git clone --single-branch https://github.com/GnuCash/gnucash /tmp/gnucash.git \
 	&& cd /tmp/gnucash.git \
 	&& apt-get -y install cmake build-essential \
 	&& apt-get -y install pkg-config libgtk2.0-dev libxslt1-dev libxml2-dev libwebkit2gtk-4.0-dev \
