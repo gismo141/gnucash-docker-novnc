@@ -60,8 +60,6 @@ RUN printf "deb http://deb.debian.org/debian stretch main" >> /etc/apt/sources.l
 	&& apt-get -y autoremove && apt-get clean \
 	&& rm -r /tmp/gnucash.git
 
-CMD [ "/gnucash/bin/gnucash", "--logto", "stderr" ]
-
 #Setup Volumes
 VOLUME /var/gnucash
 
